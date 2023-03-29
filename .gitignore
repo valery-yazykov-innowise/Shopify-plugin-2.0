@@ -4,7 +4,8 @@
 /web/storage/*.key
 /web/storage/db.sqlite
 /web/vendor
-/n web/public/js/*
+/web/public/js/*
+!/web/public/js/startScript.js
 .envgit
 .env.*
 .env
