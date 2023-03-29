@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+
+  pgsql:
+    image: 'postgres:15'
+    ports:
+      - '${FORWARD_DB_PORT:-5432}:5432'
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - 'data-pgsql:/var/lib/postgresql/data'
+    networks:
+      - shopify
+    healthcheck:
+      test:
+        - CMD
+        - pg_isready
+        - '-q'
+        - '-d'
+        - '${DB_DATABASE}'
+        - '-U'
+        - '${DB_USERNAME}'
+      retries: 3
+      timeout: 5s
+
+networks:
+  shopify:
+    driver: bridge
+volumes:
+  data-pgsql:
+    driver: local

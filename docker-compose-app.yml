@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        SHOPIFY_API_KEY: '${SHOPIFY_API_KEY}'
+    ports:
+      - '80:80'
+    env_file:
+      - ./web/.env
+    volumes:
+      - './web/:/app/'
+    networks:
+      - shopify
+    depends_on:
+      pgsql:
+        condition: service_healthy
+
+networks:
+  shopify:
+    driver: bridge
